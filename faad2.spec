@@ -15,11 +15,11 @@ Source0:	http://dl.sourceforge.net/faac/%{name}-%{version}-%{_rc}.tar.gz
 URL:		http://www.audiocoding.com/
 BuildRequires:	autoconf
 BuildRequires:	automake
-%{!?_without_xmms:BuildRequires:	id3lib-devel >= 3.8.2 }
+%{?with_xmms:BuildRequires:	id3lib-devel >= 3.8.2 }
 BuildRequires:	libsndfile-devel >= 1.0.4
 BuildRequires:	libtool
-%{!?_without_xmms:Buildrequires:	rpmbuild(macros) >= 1.125}
-%{!?_without_xmms:BuildRequires:	xmms-devel}
+%{?with_xmms:Buildrequires:	rpmbuild(macros) >= 1.125}
+%{?with_xmms:BuildRequires:	xmms-devel}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
