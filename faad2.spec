@@ -6,7 +6,7 @@ Summary:	Freeware Advanced Audio Decoder 2
 Summary(pl):	Darmowy zaawansowany dekoder audio
 Name:		faad2
 Version:	1.1
-Release:	2
+Release:	3
 License:	GPL
 Group:		Libraries
 Source0:	http://faac.sourceforge.net/files/%{name}-%{version}.tar.gz
@@ -18,12 +18,9 @@ BuildRequires:	automake
 %{!?_without_xmms:BuildRequires:	id3lib-devel >= 3.8.2 }
 BuildRequires:	libsndfile-devel >= 1.0.4
 BuildRequires:	libtool
+%{!?_without_xmms:Buildrequires:	rpmbuild(macros) >= 1.125}
 %{!?_without_xmms:BuildRequires:	xmms-devel}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
-
-%if 0%{!?_without_xmms:1}
-%define		_xmms_plugin_dir	%(xmms-config --input-plugin-dir)
-%endif
 
 %description
 FAAD 2 is a LC, MAIN and LTP profile, MPEG2 and MPEG-4 AAC decoder,
@@ -62,6 +59,7 @@ Summary:	XMMS plugin for AAC files
 Summary(pl):	Wtyczka XMMS do plików AAC
 Group:		X11/Applications/Sound
 Requires:	%{name} = %{version}
+Requires:	xmms
 
 %description -n xmms-input-faad2
 XMMS plugin for AAC files.
@@ -97,8 +95,8 @@ rm -rf $RPM_BUILD_ROOT
 	DESTDIR=$RPM_BUILD_ROOT
 
 %if 0%{!?_without_xmms:1}
-install -d $RPM_BUILD_ROOT%{_xmms_plugin_dir}
-install plugins/xmms/libaac-XMMS.so $RPM_BUILD_ROOT%{_xmms_plugin_dir}
+install -d $RPM_BUILD_ROOT%{xmms_input_plugindir}
+install plugins/xmms/libaac-XMMS.so $RPM_BUILD_ROOT%{xmms_input_plugindir}
 %endif
 
 %clean
@@ -126,5 +124,5 @@ rm -rf $RPM_BUILD_ROOT
 %if 0%{!?_without_xmms:1}
 %files -n xmms-input-faad2
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_xmms_plugin_dir}/*.so
+%attr(755,root,root) %{xmms_input_plugindir}/*.so
 %endif
