@@ -17,6 +17,7 @@ Group:		Applications/Sound
 Source0:	http://dl.sourceforge.net/faac/%{name}-%{version}.tar.gz
 # Source0-md5:	1a6f79365f2934a4888b210ef47a3a07
 Patch0:		%{name}-make.patch
+Patch1:		%{name}-mp4v2.patch
 URL:		http://www.audiocoding.com/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -105,6 +106,7 @@ Wtyczka XMMS do plików AAC.
 %prep
 %setup -q -n %{name}
 %patch0 -p1
+%patch1 -p1
 
 %build
 %{__libtoolize}
@@ -124,6 +126,7 @@ rm -rf $RPM_BUILD_ROOT
 	DESTDIR=$RPM_BUILD_ROOT
 
 rm -f $RPM_BUILD_ROOT%{xmms_input_plugindir}/*.{la,a}
+rm -f $RPM_BUILD_ROOT%{_libdir}/mp4player_plugin/*.{la,a}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -164,5 +167,5 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with mpeg4ip}
 %files -n mpeg4ip-plugin-faad2
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/mp4player_plugin/*.so
+%attr(755,root,root) %{_libdir}/mp4player_plugin/*.so*
 %endif
