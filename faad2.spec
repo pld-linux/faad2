@@ -1,17 +1,17 @@
 #
 # Conditional build:
-# _without_xmms		- without XMMS plugin
+%bcond_without	xmms	# without XMMS plugin
 #
+%define		_rc rc3
 Summary:	Freeware Advanced Audio Decoder 2
 Summary(pl):	Darmowy zaawansowany dekoder audio
 Name:		faad2
-Version:	1.1
-Release:	3
+Version:	2.0
+Release:	1
 License:	GPL
 Group:		Libraries
-Source0:	http://faac.sourceforge.net/files/%{name}-%{version}.tar.gz
-# Source0-md5:	5a20a6268484dea0e080df47f64b9075
-Patch0:		%{name}-libsndfile.patch
+Source0:	http://dl.sourceforge.net/faac/%{name}-%{version}-%{_rc}.tar.gz
+# Source0-md5:	0080076438655ed7facf1089a9805aff
 URL:		http://www.audiocoding.com/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -69,23 +69,15 @@ Wtyczka XMMS do plików AAC.
 
 %prep
 %setup -q -n %{name}
-%patch0 -p1
 
 %build
-rm -f missing
-%{__libtoolize}
-%{__aclocal}
-%{__autoconf}
-%{__automake}
+sh ./bootstrap
 %configure
 %{__make}
 
-%if 0%{!?_without_xmms:1}
-cd plugins/xmms
-%{__cc} -shared -fPIC -o libaac-XMMS.so aac-XMMS.c \
-	`xmms-config --cflags --libs` \
-	-I../../include \
-	-L../../libfaad/.libs -lfaad -lid3 -lz
+%if %{with xmms}
+%{__make} -C plugins/xmms \
+	GTK_CONFIG=gtk-config
 %endif
 
 %install
@@ -94,9 +86,12 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-%if 0%{!?_without_xmms:1}
-install -d $RPM_BUILD_ROOT%{xmms_input_plugindir}
-install plugins/xmms/libaac-XMMS.so $RPM_BUILD_ROOT%{xmms_input_plugindir}
+%if %{with xmms}
+%{__make} \
+	-C plugins/xmms \
+	install \
+	GTK_CONFIG=gtk-config \
+	DESTDIR=$RPM_BUILD_ROOT
 %endif
 
 %clean
@@ -121,7 +116,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %{_libdir}/lib*.a
 
-%if 0%{!?_without_xmms:1}
+%if %{with xmms}
 %files -n xmms-input-faad2
 %defattr(644,root,root,755)
 %attr(755,root,root) %{xmms_input_plugindir}/*.so
