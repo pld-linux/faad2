@@ -26,7 +26,7 @@ BuildRequires:	automake
 %{?with_xmms:BuildRequires:	id3lib-devel >= 3.8.2}
 BuildRequires:	libtool >= 2:1.4d-3
 %{?with_mpeg4ip:BuildRequires:	mpeg4ip-devel >= 1.1}
-%{?with_xmms:Buildrequires:	rpmbuild(macros) >= 1.125}
+%{?with_xmms:BuildRequires:	rpmbuild(macros) >= 1.125}
 %{?with_xmms:BuildRequires:	xmms-devel}
 Requires:	%{name}-libs = %{version}-%{release}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
