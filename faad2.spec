@@ -10,6 +10,7 @@ Release:	2
 License:	GPL
 Group:		Libraries
 Source0:	http://faac.sourceforge.net/files/%{name}-%{version}.tar.gz
+# Source0-md5:	5a20a6268484dea0e080df47f64b9075
 Patch0:		%{name}-libsndfile.patch
 URL:		http://www.audiocoding.com/
 BuildRequires:	autoconf
