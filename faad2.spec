@@ -6,7 +6,7 @@ Summary:	Freeware Advanced Audio Decoder 2
 Summary(pl):	Darmowy zaawansowany dekoder audio
 Name:		faad2
 Version:	1.1
-Release:	1
+Release:	2
 License:	GPL
 Group:		Libraries
 Source0:	http://faac.sourceforge.net/files/%{name}-%{version}.tar.gz
@@ -14,7 +14,7 @@ Patch0:		%{name}-libsndfile.patch
 URL:		http://www.audiocoding.com/
 BuildRequires:	autoconf
 BuildRequires:	automake
-%{!?_without_xmms:BuildRequires:	id3lib-devel}
+%{!?_without_xmms:BuildRequires:	id3lib-devel >= 3.8.2 }
 BuildRequires:	libsndfile-devel >= 1.0.4
 BuildRequires:	libtool
 %{!?_without_xmms:BuildRequires:	xmms-devel}
