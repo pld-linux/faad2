@@ -1,0 +1,38 @@
+--- faad2/plugins/xmms/src/Makefile.am.orig	2004-02-06 17:05:07.000000000 +0100
++++ faad2/plugins/xmms/src/Makefile.am	2004-02-11 00:21:02.637575048 +0100
+@@ -1,12 +1,20 @@
+ libdir = `$(XMMS_CONFIG) --input-plugin-dir`
+ lib_LTLIBRARIES = libmp4.la
+ 
++if WITH_MP4V2
++LIBMP4V2 = $(top_builddir)/common/mp4v2/libmp4v2.la
++MP4V2_flags = -I$(top_srcdir)/common/mp4v2
++else
++LIBMP4V2 = -lmp4v2
++MP4V2_flags =
++endif
++
+ libmp4_la_CFLAGS = `$(XMMS_CONFIG) --cflags` -Wall \
+        `$(GTK_CONFIG) --cflags` -DHAVE_GLIB_H=1 \
+-       -I$(top_srcdir)/include -I$(top_srcdir)/common/mp4v2
++       -I$(top_srcdir)/include $(MP4V2_flags)
+ 
+ libmp4_la_LIBADD = $(top_builddir)/libfaad/libfaad.la \
+-       $(top_builddir)/common/mp4v2/libmp4v2.la
++       $(LIBMP4V2)
+ 
+ libmp4_la_LDFLAGS = -module -avoid-version `$(XMMS_CONFIG) --libs` \
+        `$(GTK_CONFIG) --libs` -lpthread -lstdc++
+--- faad2/configure.in.orig	2004-02-06 17:04:39.000000000 +0100
++++ faad2/configure.in	2004-02-11 00:17:31.385690216 +0100
+@@ -102,8 +102,10 @@
+   fi
+ 
+   AM_CONDITIONAL(HAVE_XMMS, true)
++  if test x$external_mp4v2 != xyes; then
+   AC_MSG_NOTICE("xmms plugin requires libmp4v2 to be build")
+   AM_CONDITIONAL(WITH_MP4V2, true)
++  fi
+   AC_CONFIG_FILES(plugins/xmms/Makefile plugins/xmms/src/Makefile)
+ else
+  AC_MSG_NOTICE(no xmms build configured)
