@@ -16,9 +16,6 @@ BuildRequires:	libsndfile-devel >= 1.0.4
 BuildRequires:	libtool
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-# kurwa, ja nie potrafie, niech ktos temu palantowi powie zeby sie od tego odczepil
-#%%define		_noautoreqdep	"libsndfile.so.1(libsndfile.so.1.0)"
-
 %description
 FAAD 2 is a LC, MAIN and LTP profile, MPEG2 and MPEG-4 AAC decoder,
 completely written from scratch.
