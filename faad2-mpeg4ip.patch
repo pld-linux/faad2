@@ -1,0 +1,11 @@
+--- faad2/plugins/mpeg4ip/faad2.cpp.orig	2004-11-08 13:45:10.000000000 +0100
++++ faad2/plugins/mpeg4ip/faad2.cpp	2004-11-08 13:44:28.000000000 +0100
+@@ -237,7 +237,7 @@
+       aac->m_vft->audio_configure(aac->m_ifptr,
+                   aac->m_freq,
+                   aac->m_chans,
+-                  AUDIO_S16SYS,
++                  (audio_format_t)AUDIO_S16SYS,
+                   aac->m_output_frame_size);
+ 
+       uint8_t *now = aac->m_vft->audio_get_buffer(aac->m_ifptr);
