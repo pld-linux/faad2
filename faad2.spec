@@ -72,7 +72,9 @@ Wtyczka XMMS do plików AAC.
 
 %build
 sh ./bootstrap
-%configure
+%configure \
+	--with-mp4v2
+
 %{__make}
 
 %if %{with xmms}
