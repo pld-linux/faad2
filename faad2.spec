@@ -20,6 +20,7 @@ Patch0:		%{name}-make.patch
 Patch1:		%{name}-mp4v2.patch
 Patch2:		%{name}-no-extension.patch
 Patch3:		%{name}-mpeg4ip.patch
+Patch4:		%{name}-gcc4.patch
 URL:		http://www.audiocoding.com/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -111,6 +112,7 @@ Wtyczka XMMS do plików AAC.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %build
 %{__libtoolize}
