@@ -1,0 +1,16 @@
+remove need for inclusion of mp4ff_int_types.h in -devel package
+
+--- ./common/mp4ff/mp4ff.h~	2004-01-11 17:52:18.000000000 +0200
++++ ./common/mp4ff/mp4ff.h	2005-09-08 03:29:23.000000000 +0300
+@@ -32,7 +32,11 @@
+ extern "C" {
+ #endif /* __cplusplus */
+ 
++#ifdef _WIN32
+ #include "mp4ff_int_types.h"
++#else
++#include <stdint.h>
++#endif
+ 
+ /* file callback structure */
+ typedef struct

@@ -11,7 +11,7 @@ Summary:	Freeware Advanced Audio Decoder 2
 Summary(pl):	Darmowy zaawansowany dekoder audio
 Name:		faad2
 Version:	2.0
-Release:	5.2
+Release:	5.3
 License:	GPL
 Group:		Applications/Sound
 Source0:	http://dl.sourceforge.net/faac/%{name}-%{version}.tar.gz
@@ -21,6 +21,7 @@ Patch1:		%{name}-mp4v2.patch
 Patch2:		%{name}-no-extension.patch
 Patch3:		%{name}-mpeg4ip.patch
 Patch4:		%{name}-gcc4.patch
+Patch5:		%{name}-inttypes_h.patch
 URL:		http://www.audiocoding.com/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -113,6 +114,7 @@ Wtyczka XMMS do plików AAC.
 %patch2 -p1
 #%patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 %build
 %{__libtoolize}
@@ -134,8 +136,6 @@ rm -rf $RPM_BUILD_ROOT
 
 rm -f $RPM_BUILD_ROOT%{xmms_input_plugindir}/*.{la,a}
 rm -f $RPM_BUILD_ROOT%{_libdir}/mp4player_plugin/*.{la,a}
-
-install ./common/mp4ff/mp4ff_int_types.h $RPM_BUILD_ROOT%{_includedir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -161,7 +161,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libmp4ff.la
 %{_includedir}/faad.h
 %{_includedir}/mp4ff.h
-%{_includedir}/mp4ff_int_types.h
 
 %files static
 %defattr(644,root,root,755)
