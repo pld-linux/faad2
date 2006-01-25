@@ -1,11 +1,103 @@
---- faad2/plugins/mpeg4ip/faad2.cpp.orig	2004-11-08 13:45:10.000000000 +0100
-+++ faad2/plugins/mpeg4ip/faad2.cpp	2004-11-08 13:44:28.000000000 +0100
-@@ -237,7 +237,7 @@
+--- faad2/plugins/mpeg4ip/aa_file.cpp.orig	2006-01-25 21:44:44.000000000 +0100
++++ faad2/plugins/mpeg4ip/aa_file.cpp	2006-01-25 22:29:06.103470750 +0100
+@@ -77,7 +77,7 @@
+ 
+ int aac_file_next_frame (codec_data_t *your,
+              uint8_t **buffer,
+-             uint64_t *ts)
++             frame_timestamp_t *ts)
+ {
+   aac_codec_t *aac = (aac_codec_t *)your;
+ 
+@@ -98,7 +98,7 @@
+   uint64_t calc;
+   calc = aac->m_framecount * 1024 * M_LLU;
+   calc /= aac->m_freq;
+-  *ts = calc;
++  ts->msec_timestamp = calc;
+   *buffer = aac->m_buffer;
+   aac->m_framecount++;
+   return (aac->m_buffer_size);
+--- faad2/plugins/mpeg4ip/faad2.h.orig	2004-01-05 15:05:12.000000000 +0100
++++ faad2/plugins/mpeg4ip/faad2.h	2006-01-25 22:17:53.373427750 +0100
+@@ -81,7 +81,7 @@
+ 
+ int aac_file_next_frame(codec_data_t *ifptr,
+             uint8_t **buffer,
+-            uint64_t *ts);
++            frame_timestamp_t *ts);
+ int aac_file_eof(codec_data_t *ifptr);
+ 
+ void aac_file_used_for_frame(codec_data_t *ifptr,
+--- faad2/plugins/mpeg4ip/faad2.cpp.orig	2006-01-25 22:43:27.605311250 +0100
++++ faad2/plugins/mpeg4ip/faad2.cpp	2006-01-25 22:27:24.273106750 +0100
+@@ -35,7 +35,9 @@
+ /*
+  * Create CAACodec class
+  */
+-static codec_data_t *aac_codec_create (const char *compressor,
++static codec_data_t *aac_codec_create (
++                       const char* /*stream_type*/,
++                       const char* /*compressor*/,
+                        int type,
+                        int profile,
+                        format_list_t *media_fmt,
+@@ -148,7 +150,7 @@
+  * Decode task call for FAAC
+  */
+ static int aac_decode (codec_data_t *ptr,
+-               uint64_t ts,
++               frame_timestamp_t* ts,
+                int from_rtp,
+                int *sync_frame,
+                uint8_t *buffer,
+@@ -163,15 +165,15 @@
+   if (aac->m_record_sync_time) {
+     aac->m_current_frame = 0;
+     aac->m_record_sync_time = 0;
+-    aac->m_current_time = ts;
+-    aac->m_last_rtp_ts = ts;
++    aac->m_current_time = ts->msec_timestamp;
++    aac->m_last_rtp_ts = ts->msec_timestamp;
+   } else {
+-    if (aac->m_last_rtp_ts == ts) {
++    if (aac->m_last_rtp_ts == ts->msec_timestamp) {
+       aac->m_current_time += aac->m_msec_per_frame;
+       aac->m_current_frame++;
+     } else {
+-      aac->m_last_rtp_ts = ts;
+-      aac->m_current_time = ts;
++      aac->m_last_rtp_ts = ts->msec_timestamp;
++      aac->m_current_time = ts->msec_timestamp;
+       aac->m_current_frame = 0;
+     }
+ 
+@@ -237,9 +239,9 @@
        aac->m_vft->audio_configure(aac->m_ifptr,
                    aac->m_freq,
                    aac->m_chans,
 -                  AUDIO_S16SYS,
-+                  (audio_format_t)AUDIO_S16SYS,
++                  AUDIO_FMT_S16,
                    aac->m_output_frame_size);
+-      uint8_t *now = aac->m_vft->audio_get_buffer(aac->m_ifptr);
++      uint8_t *now = aac->m_vft->audio_get_buffer(aac->m_ifptr, aac->m_freq, aac->m_current_time);
+       aac->m_audio_inited = 1;
+     }
+     /*
+@@ -281,6 +283,7 @@
+ };
  
-       uint8_t *now = aac->m_vft->audio_get_buffer(aac->m_ifptr);
+ static int aac_codec_check (lib_message_func_t message,
++                const char *stream_type,
+                 const char *compressor,
+                 int type,
+                 int profile,
+@@ -322,7 +325,7 @@
+   }
+   if (userdata != NULL) {
+     mpeg4_audio_config_t audio_config;
+-    decode_mpeg4_audio_config(userdata, userdata_size, &audio_config);
++    decode_mpeg4_audio_config(userdata, userdata_size, &audio_config, false);
+     message(LOG_DEBUG, "aac", "audio type is %d", audio_config.audio_object_type);
+     if (fmtp != NULL) free_fmtp_parse(fmtp);
+ 
