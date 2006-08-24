@@ -20,7 +20,7 @@ Patch1:		%{name}-no-extension.patch
 Patch2:		%{name}-mpeg4ip.patch
 Patch3:		%{name}-inttypes_h.patch
 URL:		http://www.audiocoding.com/
-BuildRequires:	SDL-devel
+%{?with_mpeg4ip:BuildRequires:	SDL-devel}
 BuildRequires:	autoconf
 BuildRequires:	automake
 %{?with_xmms:BuildRequires:	id3lib-devel >= 3.8.2}
