@@ -1,8 +1,6 @@
-remove need for inclusion of mp4ff_int_types.h in -devel package
-
---- ./common/mp4ff/mp4ff.h~	2004-01-11 17:52:18.000000000 +0200
-+++ ./common/mp4ff/mp4ff.h	2005-09-08 03:29:23.000000000 +0300
-@@ -32,7 +32,11 @@
+--- faad2/common/mp4ff/mp4ff.h.orig	2006-05-17 20:49:20.000000000 +0200
++++ faad2/common/mp4ff/mp4ff.h	2006-08-23 23:56:48.339167500 +0200
+@@ -37,7 +37,11 @@
  extern "C" {
  #endif /* __cplusplus */
  

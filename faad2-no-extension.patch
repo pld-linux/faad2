@@ -1,20 +1,11 @@
---- faad2.warn/plugins/xmms/src/libmp4.c	2003-12-03 19:37:56.000000000 +0100
-+++ faad2/plugins/xmms/src/libmp4.c	2004-06-12 13:53:42.364218112 +0200
-@@ -112,14 +112,15 @@
+--- faad2/plugins/xmms/src/libmp4.c.orig	2006-08-07 20:47:45.000000000 +0200
++++ faad2/plugins/xmms/src/libmp4.c	2006-08-23 23:50:29.267477000 +0200
+@@ -127,7 +127,7 @@
      gchar*	extention;
  
      extention = strrchr(filename, '.');
--    if (extention &&
--	!strcasecmp(extention, ".mp4") ||	// official extention
-+    if (extention && *extention) {
-+	if(!strcasecmp(extention, ".mp4") ||	// official extention
- 	!strcasecmp(extention, ".m4a") ||	// Apple mp4 extention
- 	!strcasecmp(extention, ".aac")		// old MPEG2/4-AAC extention
- 	){
-       return (1);
-     }
-   }
-+  }
-   return(0);
- }
- 
+-    if(extention &&
++    if(extention && *extention &&
+        (!strncasecmp(extention, ".mp4", 4) ||	// official extention
+ 	!strncasecmp(extention, ".m4a", 4) ||	// Apple mp4 extention
+ 	!strncasecmp(extention, ".aac", 4)	// old MPEG2/4-AAC extention
