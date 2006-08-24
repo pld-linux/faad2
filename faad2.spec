@@ -1,8 +1,9 @@
 #
 # Conditional build:
-%bcond_without	mpeg4ip		# don't build MPEG4IP plugin
-%bcond_without	xmms		# don't build XMMS plugin
 %bcond_with	bootstrap	# bootstrap (alias for _without_mpeg4ip)
+%bcond_without	mpeg4ip		# don't build MPEG4IP plugin
+%bcond_without	static_libs	# don't build static libraries
+%bcond_without	xmms		# don't build XMMS plugin
 #
 %{?with_bootstrap:%undefine with_mpeg4ip}
 Summary:	Freeware Advanced Audio Decoder 2
@@ -19,6 +20,7 @@ Patch1:		%{name}-no-extension.patch
 Patch2:		%{name}-mpeg4ip.patch
 Patch3:		%{name}-inttypes_h.patch
 URL:		http://www.audiocoding.com/
+BuildRequires:	SDL-devel
 BuildRequires:	autoconf
 BuildRequires:	automake
 %{?with_xmms:BuildRequires:	id3lib-devel >= 3.8.2}
@@ -118,7 +120,8 @@ Wtyczka XMMS do plików AAC.
 %{__automake}
 %configure \
 	--with%{!?with_xmms:out}-xmms \
-	--with%{!?with_mpeg4ip:out}-mpeg4ip
+	--with%{!?with_mpeg4ip:out}-mpeg4ip \
+	%{!?with_static_libs:--disable-static}
 
 %{__make}
 
@@ -153,9 +156,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/faad.h
 %{_includedir}/neaacdec.h
 
+%if %{with static_libs}
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libfaad.a
+%endif
 
 %if %{with xmms}
 %files -n xmms-input-faad2
