@@ -1,27 +1,23 @@
 #
 # Conditional build:
-%bcond_without	mpeg4ip		# build without mp4v2 support in decoder
-				# ...and don't build XMMS or MPEG4IP plugins
+%bcond_without	mpeg4ip		# don't build MPEG4IP plugin
 %bcond_without	xmms		# don't build XMMS plugin
 %bcond_with	bootstrap	# bootstrap (alias for _without_mpeg4ip)
 #
 %{?with_bootstrap:%undefine with_mpeg4ip}
-%{!?with_mpeg4ip:%undefine with_xmms}
 Summary:	Freeware Advanced Audio Decoder 2
 Summary(pl):	Darmowy zaawansowany dekoder audio
 Name:		faad2
-Version:	2.0
-Release:	6
+Version:	2.5
+Release:	1
 License:	GPL
 Group:		Applications/Sound
 Source0:	http://dl.sourceforge.net/faac/%{name}-%{version}.tar.gz
-# Source0-md5:	1a6f79365f2934a4888b210ef47a3a07
+# Source0-md5:	696490935bf65b2ace4aafaff79e2396
 Patch0:		%{name}-make.patch
-Patch1:		%{name}-mp4v2.patch
-Patch2:		%{name}-no-extension.patch
-Patch3:		%{name}-mpeg4ip.patch
-Patch4:		%{name}-gcc4.patch
-Patch5:		%{name}-inttypes_h.patch
+Patch1:		%{name}-no-extension.patch
+Patch2:		%{name}-mpeg4ip.patch
+Patch3:		%{name}-inttypes_h.patch
 URL:		http://www.audiocoding.com/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -113,8 +109,6 @@ Wtyczka XMMS do plików AAC.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
-%patch5 -p1
 
 %build
 %{__libtoolize}
@@ -124,7 +118,7 @@ Wtyczka XMMS do plików AAC.
 %{__automake}
 %configure \
 	--with%{!?with_xmms:out}-xmms \
-	--with%{!?with_mpeg4ip:out}-mp4v2
+	--with%{!?with_mpeg4ip:out}-mpeg4ip
 
 %{__make}
 
@@ -151,21 +145,17 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog NEWS README TODO
 %attr(755,root,root) %{_libdir}/libfaad.so.*.*
-%attr(755,root,root) %{_libdir}/libmp4ff.so.*.*
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libfaad.so
-%attr(755,root,root) %{_libdir}/libmp4ff.so
 %{_libdir}/libfaad.la
-%{_libdir}/libmp4ff.la
 %{_includedir}/faad.h
-%{_includedir}/mp4ff.h
+%{_includedir}/neaacdec.h
 
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libfaad.a
-%{_libdir}/libmp4ff.a
 
 %if %{with xmms}
 %files -n xmms-input-faad2
