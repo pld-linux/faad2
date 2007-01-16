@@ -1,0 +1,10 @@
+--- faad2/libfaad/Makefile.am.orig	2007-01-16 17:52:58.000000000 +0000
++++ faad2/libfaad/Makefile.am	2007-01-16 17:53:29.000000000 +0000
+@@ -3,6 +3,7 @@
+                   $(top_srcdir)/include/neaacdec.h
+ 
+ libfaad_la_LIBADD = -lm
++libfaad_la_LDFLAGS = -version-info 1:0:0
+ 
+ libfaad_la_SOURCES = bits.c cfft.c decoder.c drc.c \
+ drm_dec.c error.c filtbank.c \
