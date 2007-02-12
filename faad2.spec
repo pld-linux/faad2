@@ -7,7 +7,7 @@
 #
 %{?with_bootstrap:%undefine with_mpeg4ip}
 Summary:	Freeware Advanced Audio Decoder 2
-Summary(pl):	Darmowy zaawansowany dekoder audio
+Summary(pl.UTF-8):   Darmowy zaawansowany dekoder audio
 Name:		faad2
 Version:	2.5
 Release:	2
@@ -37,13 +37,13 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 FAAD 2 is a LC, MAIN and LTP profile, MPEG2 and MPEG-4 AAC decoder,
 completely written from scratch.
 
-%description -l pl
-FAAD 2 to napisany ca砶owicie od pocz眛ku dekoder MPEG2 i MPEG-4
-obs硊guj眂y profile LC, MAIN i LTP.
+%description -l pl.UTF-8
+FAAD 2 to napisany ca艂kowicie od pocz膮tku dekoder MPEG2 i MPEG-4
+obs艂uguj膮cy profile LC, MAIN i LTP.
 
 %package libs
 Summary:	FAAD 2 libraries
-Summary(pl):	Biblioteki FAAD 2
+Summary(pl.UTF-8):   Biblioteki FAAD 2
 Group:		Libraries
 Conflicts:	faad2 < 2.0-3
 
@@ -52,38 +52,38 @@ FAAD 2 is a LC, MAIN and LTP profile, MPEG2 and MPEG-4 AAC decoder,
 completely written from scratch. This package contains base FAAD 2
 libraries: libfaad and libmp4ff.
 
-%description libs -l pl
-FAAD 2 to napisany ca砶owicie od pocz眛ku dekoder MPEG2 i MPEG-4
-obs硊guj眂y profile LC, MAIN i LTP. Ten pakiet zawiera podstawowe
+%description libs -l pl.UTF-8
+FAAD 2 to napisany ca艂kowicie od pocz膮tku dekoder MPEG2 i MPEG-4
+obs艂uguj膮cy profile LC, MAIN i LTP. Ten pakiet zawiera podstawowe
 biblioteki FAAD 2: libfaad i libmp4ff.
 
 %package devel
 Summary:	Header files for faad2
-Summary(pl):	Pliki nag丑wkowe faad2
+Summary(pl.UTF-8):   Pliki nag艂贸wkowe faad2
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 
 %description devel
 Header files for faad2.
 
-%description devel -l pl
-Pliki nag丑wkowe faad2.
+%description devel -l pl.UTF-8
+Pliki nag艂贸wkowe faad2.
 
 %package static
 Summary:	Static faad2 library
-Summary(pl):	Statyczna biblioteka faad2
+Summary(pl.UTF-8):   Statyczna biblioteka faad2
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 Static faad2 library.
 
-%description static -l pl
+%description static -l pl.UTF-8
 Statyczna biblioteka faad2.
 
 %package -n mpeg4ip-plugin-faad2
 Summary:	MPEG4IP plugin for AAC files
-Summary(pl):	Wtyczka MPEG4IP do plik體 AAC
+Summary(pl.UTF-8):   Wtyczka MPEG4IP do plik贸w AAC
 Group:		Applications/Sound
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	mpeg4ip
@@ -91,12 +91,12 @@ Requires:	mpeg4ip
 %description -n mpeg4ip-plugin-faad2
 MPEG4IP plugin for AAC files.
 
-%description -n mpeg4ip-plugin-faad2 -l pl
-Wtyczka MPEG4IP do plik體 AAC.
+%description -n mpeg4ip-plugin-faad2 -l pl.UTF-8
+Wtyczka MPEG4IP do plik贸w AAC.
 
 %package -n xmms-input-faad2
 Summary:	XMMS plugin for AAC files
-Summary(pl):	Wtyczka XMMS do plik體 AAC
+Summary(pl.UTF-8):   Wtyczka XMMS do plik贸w AAC
 Group:		X11/Applications/Sound
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	xmms
@@ -104,8 +104,8 @@ Requires:	xmms
 %description -n xmms-input-faad2
 XMMS plugin for AAC files.
 
-%description -n xmms-input-faad2 -l pl
-Wtyczka XMMS do plik體 AAC.
+%description -n xmms-input-faad2 -l pl.UTF-8
+Wtyczka XMMS do plik贸w AAC.
 
 %prep
 %setup -q -n %{name}
