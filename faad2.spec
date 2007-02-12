@@ -7,7 +7,7 @@
 #
 %{?with_bootstrap:%undefine with_mpeg4ip}
 Summary:	Freeware Advanced Audio Decoder 2
-Summary(pl.UTF-8):   Darmowy zaawansowany dekoder audio
+Summary(pl.UTF-8):	Darmowy zaawansowany dekoder audio
 Name:		faad2
 Version:	2.5
 Release:	2
@@ -43,7 +43,7 @@ obsługujący profile LC, MAIN i LTP.
 
 %package libs
 Summary:	FAAD 2 libraries
-Summary(pl.UTF-8):   Biblioteki FAAD 2
+Summary(pl.UTF-8):	Biblioteki FAAD 2
 Group:		Libraries
 Conflicts:	faad2 < 2.0-3
 
@@ -59,7 +59,7 @@ biblioteki FAAD 2: libfaad i libmp4ff.
 
 %package devel
 Summary:	Header files for faad2
-Summary(pl.UTF-8):   Pliki nagłówkowe faad2
+Summary(pl.UTF-8):	Pliki nagłówkowe faad2
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 
@@ -71,7 +71,7 @@ Pliki nagłówkowe faad2.
 
 %package static
 Summary:	Static faad2 library
-Summary(pl.UTF-8):   Statyczna biblioteka faad2
+Summary(pl.UTF-8):	Statyczna biblioteka faad2
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
@@ -83,7 +83,7 @@ Statyczna biblioteka faad2.
 
 %package -n mpeg4ip-plugin-faad2
 Summary:	MPEG4IP plugin for AAC files
-Summary(pl.UTF-8):   Wtyczka MPEG4IP do plików AAC
+Summary(pl.UTF-8):	Wtyczka MPEG4IP do plików AAC
 Group:		Applications/Sound
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	mpeg4ip
@@ -96,7 +96,7 @@ Wtyczka MPEG4IP do plików AAC.
 
 %package -n xmms-input-faad2
 Summary:	XMMS plugin for AAC files
-Summary(pl.UTF-8):   Wtyczka XMMS do plików AAC
+Summary(pl.UTF-8):	Wtyczka XMMS do plików AAC
 Group:		X11/Applications/Sound
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	xmms
