@@ -1,6 +1,6 @@
 --- faad2/libfaad/Makefile.am.orig	2004-11-08 09:06:09.000000000 +0100
-+++ faad2/libfaad/Makefile.am	2006-08-23 23:39:14.753322500 +0200
-@@ -3,7 +3,7 @@
++++ faad2/libfaad/Makefile.am	2007-11-04 11:44:26.132686561 +0100
+@@ -3,7 +3,7 @@ lib_LTLIBRARIES = libfaad.la
  include_HEADERS = $(top_srcdir)/include/faad.h \
                    $(top_srcdir)/include/neaacdec.h
  
@@ -9,46 +9,15 @@
  
  libfaad_la_SOURCES = bits.c cfft.c decoder.c drc.c \
  drm_dec.c error.c filtbank.c \
---- faad2/plugins/Makefile.am.orig	2006-08-07 20:47:45.000000000 +0200
-+++ faad2/plugins/Makefile.am	2006-08-24 00:00:04.739441750 +0200
-@@ -8,10 +8,6 @@
- if HAVE_XMMS
- SUBDIRS = xmms
- else
--if HAVE_BMP
--SUBDIRS = bmp
--else
- SUBDIRS =
--endif #HAVE_BMP
- endif #HAVE_XMMS
- endif #HAVE_MPEG4IP_PLUG
---- faad2/plugins/xmms/src/Makefile.am.orig	2006-08-07 20:47:45.000000000 +0200
-+++ faad2/plugins/xmms/src/Makefile.am	2006-08-24 00:01:12.775693750 +0200
-@@ -1,13 +1,13 @@
- if HAVE_BMP
--libdir=$(shell pkg-config --variable=input-plugin-dir bmp)
-+plugindir=$(shell pkg-config --variable=input-plugin-dir bmp)
- local_CFLAGS=$(shell pkg-config --cflags bmp)
- local_LDFLAGS=$(shell pkg-config --libs bmp)
- else
+--- faad2/plugins/xmms/src/Makefile.am.orig	2006-09-25 21:52:53.000000000 +0200
++++ faad2/plugins/xmms/src/Makefile.am	2007-11-04 11:45:59.870028348 +0100
+@@ -1,7 +1,7 @@
  local_CFLAGS=`$(XMMS_CONFIG) --cflags` -Wall
  local_LDFLAGS=`$(XMMS_CONFIG) --libs`
 -libdir = `$(XMMS_CONFIG) --input-plugin-dir`
-+plugindir = `$(XMMS_CONFIG) --input-plugin-dir`
- endif #HAVE_BMP
 -lib_LTLIBRARIES = libmp4.la
++plugindir = `$(XMMS_CONFIG) --input-plugin-dir`
 +plugin_LTLIBRARIES = libmp4.la
  
  libmp4_la_CFLAGS = $(local_CFLAGS) -Wall \
         -I$(top_srcdir)/include -I$(top_srcdir)/common/mp4ff
---- faad2/configure.in.orig	2006-08-13 16:13:31.000000000 +0200
-+++ faad2/configure.in	2006-08-24 00:04:16.259160750 +0200
-@@ -118,6 +118,8 @@
-   AC_DEFINE([HAVE_BMP], 1, [User wants beep media player plugin built])
-   AM_CONDITIONAL([HAVE_XMMS], true)
-   AM_CONDITIONAL([HAVE_BMP], true)
-+else
-+  AM_CONDITIONAL([HAVE_BMP], false)
- fi
- 
- if test x$WITHDRM = xyes; then
