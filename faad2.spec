@@ -9,18 +9,16 @@
 Summary:	Freeware Advanced Audio Decoder 2
 Summary(pl.UTF-8):	Darmowy zaawansowany dekoder audio
 Name:		faad2
-Version:	2.5
-Release:	2
+Version:	2.6.1
+Release:	1
 License:	GPL
 Group:		Applications/Sound
 Source0:	http://dl.sourceforge.net/faac/%{name}-%{version}.tar.gz
-# Source0-md5:	696490935bf65b2ace4aafaff79e2396
+# Source0-md5:	74e92df40c270f216a8305fc87603c8a
 Patch0:		%{name}-make.patch
-Patch1:		%{name}-no-extension.patch
-Patch2:		%{name}-mpeg4ip.patch
-Patch3:		%{name}-inttypes_h.patch
-Patch4:		%{name}-soname.patch
-Patch5:		%{name}-backward_compat.patch
+Patch1:		%{name}-mpeg4ip.patch
+Patch2:		%{name}-soname.patch
+Patch3:		%{name}-backward_compat.patch
 URL:		http://www.audiocoding.com/
 %{?with_mpeg4ip:BuildRequires:	SDL-devel}
 BuildRequires:	autoconf
@@ -113,8 +111,6 @@ Wtyczka XMMS do plików AAC.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
-%patch5 -p1
 
 %build
 %{__libtoolize}
@@ -151,7 +147,8 @@ rm -rf $RPM_BUILD_ROOT
 %files libs
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog NEWS README TODO
-%attr(755,root,root) %{_libdir}/libfaad.so.*.*
+%attr(755,root,root) %{_libdir}/libfaad.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libfaad.so.0
 
 %files devel
 %defattr(644,root,root,755)
@@ -169,11 +166,11 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with xmms}
 %files -n xmms-input-faad2
 %defattr(644,root,root,755)
-%attr(755,root,root) %{xmms_input_plugindir}/*.so
+%attr(755,root,root) %{xmms_input_plugindir}/libmp4.so
 %endif
 
 %if %{with mpeg4ip}
 %files -n mpeg4ip-plugin-faad2
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/mp4player_plugin/*.so*
+%attr(755,root,root) %{_libdir}/mp4player_plugin/faad2_plugin.so*
 %endif
