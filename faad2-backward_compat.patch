@@ -1,6 +1,6 @@
 --- faad2/libfaad/Makefile.am.orig	2007-01-16 17:52:58.000000000 +0000
 +++ faad2/libfaad/Makefile.am	2007-01-16 17:53:29.000000000 +0000
-@@ -4,9 +4,10 @@
+@@ -4,7 +4,7 @@
                    $(top_srcdir)/include/neaacdec.h
  
  libfaad_la_LIBADD = -lm
@@ -8,71 +8,70 @@
 +libfaad_la_LDFLAGS = -version-info 1:0:1
  
  libfaad_la_SOURCES = bits.c cfft.c decoder.c drc.c \
-+backward_compat.c \
  drm_dec.c error.c filtbank.c \
- ic_predict.c is.c lt_predict.c mdct.c mp4.c ms.c output.c pns.c \
- ps_dec.c ps_syntax.c \
---- faad2/libfaad/backward_compat.c.orig	1970-01-01 00:00:00.000000000 +0000
-+++ faad2/libfaad/backward_compat.c	2007-01-16 19:22:17.000000000 +0000
-@@ -0,0 +1,61 @@
-+#include "common.h"
-+#include "structs.h"
-+#include "decoder.h"
+--- faad2/libfaad/decoder.c.orig	2007-11-01 13:33:30.000000000 +0100
++++ faad2/libfaad/decoder.c	2007-11-04 12:36:41.315350439 +0100
+@@ -1115,3 +1115,47 @@
+ 
+     return NULL;
+ }
 +
-+char* NEAACDECAPI faacDecGetErrorMessage(uint8_t errcode)
-+{
-+	return NeAACDecGetErrorMessage(errcode);
-+}
-+uint8_t NEAACDECAPI faacDecSetConfiguration(NeAACDecHandle hDecoder,
-+                                             NeAACDecConfigurationPtr config)
-+{
-+	return NeAACDecSetConfiguration(hDecoder, config);
-+}
-+NeAACDecConfigurationPtr NEAACDECAPI faacDecGetCurrentConfiguration(NeAACDecHandle hDecoder)
-+{
-+	return NeAACDecGetCurrentConfiguration(hDecoder);
-+}
-+int32_t NEAACDECAPI faacDecInit(NeAACDecHandle hDecoder, uint8_t *buffer,
-+                                 uint32_t buffer_size,
-+                                 uint32_t *samplerate, uint8_t *channels)
-+{
-+	return NeAACDecInit(hDecoder, buffer, buffer_size, samplerate, channels);
-+}
-+int8_t NEAACDECAPI faacDecInit2(NeAACDecHandle hDecoder, uint8_t *pBuffer,
-+                                 uint32_t SizeOfDecoderSpecificInfo,
-+                                 uint32_t *samplerate, uint8_t *channels)
-+{
-+	return NeAACDecInit2(hDecoder, pBuffer, SizeOfDecoderSpecificInfo, samplerate, channels);
-+}
++#ifndef NO_BACKWARD_COMPAT
++#  define ALIAS(type, func, target) type NEAACDECAPI func __attribute__((alias(#target)))
++
++ALIAS(char*, faacDecGetErrorMessage(uint8_t errcode),
++	NeAACDecGetErrorMessage);
++
++ALIAS(uint8_t, faacDecSetConfiguration(NeAACDecHandle hDecoder,
++				       NeAACDecConfigurationPtr config),
++	NeAACDecSetConfiguration);
++
++ALIAS(NeAACDecConfigurationPtr, faacDecGetCurrentConfiguration(NeAACDecHandle hDecoder),
++	NeAACDecGetCurrentConfiguration);
++
++ALIAS(int32_t, faacDecInit(NeAACDecHandle hDecoder, uint8_t *buffer,
++			   uint32_t buffer_size, uint32_t *samplerate, uint8_t *channels),
++	NeAACDecInit);
++
++ALIAS(int8_t, faacDecInit2(NeAACDecHandle hDecoder, uint8_t *pBuffer,
++			   uint32_t SizeOfDecoderSpecificInfo,
++			   uint32_t *samplerate, uint8_t *channels),
++	NeAACDecInit2);
++
 +#ifdef DRM
-+int8_t NEAACDECAPI faacDecInitDRM(NeAACDecHandle *hDecoder, uint32_t samplerate,
-+                                   uint8_t channels)
-+{
-+	return NeAACDecInitDRM(hDecoder, samplerate, channels);
-+}
++ALIAS(int8_t, faacDecInitDRM(NeAACDecHandle *hDecoder, uint32_t samplerate,
++			     uint8_t channels),
++	NeAACDecInitDRM);
 +#endif
-+void NEAACDECAPI faacDecPostSeekReset(NeAACDecHandle hDecoder, int32_t frame)
-+{
-+	return NeAACDecPostSeekReset(hDecoder, frame);
-+}
-+NeAACDecHandle NEAACDECAPI faacDecOpen(void)
-+{
-+	return NeAACDecOpen();
-+}
-+void NEAACDECAPI faacDecClose(NeAACDecHandle hDecoder)
-+{
-+	return NeAACDecClose(hDecoder);
-+}
 +
-+void* NEAACDECAPI faacDecDecode(NeAACDecHandle hDecoder,
-+                                 NeAACDecFrameInfo *hInfo,
-+                                 uint8_t *buffer, uint32_t buffer_size)
-+{
-+    return NeAACDecDecode(hDecoder, hInfo, buffer, buffer_size);
-+}
-+int8_t NEAACDECAPI AudioSpecificConfig(uint8_t *pBuffer,
-+                                               uint32_t buffer_size,
-+                                               mp4AudioSpecificConfig *mp4ASC)
-+{
-+    return NeAACDecAudioSpecificConfig(pBuffer, buffer_size, mp4ASC);
-+}
++ALIAS(void, faacDecPostSeekReset(NeAACDecHandle hDecoder, int32_t frame),
++	NeAACDecPostSeekReset);
++
++ALIAS(NeAACDecHandle, faacDecOpen(void),
++	NeAACDecOpen);
++
++ALIAS(void, faacDecClose(NeAACDecHandle hDecoder),
++	NeAACDecClose);
++
++ALIAS(void*, faacDecDecode(NeAACDecHandle hDecoder,
++			   NeAACDecFrameInfo *hInfo,
++			   uint8_t *buffer, uint32_t buffer_size),
++	NeAACDecDecode);
++
++#endif
+--- faad2/libfaad/mp4.c.orig	2007-11-01 13:33:32.000000000 +0100
++++ faad2/libfaad/mp4.c	2007-11-04 12:35:57.860874110 +0100
+@@ -296,3 +296,13 @@
+ 
+     return result;
+ }
++
++#ifndef NO_BACKWARD_COMPAT
++#  define ALIAS(type, func, target) type NEAACDECAPI func __attribute__((alias(#target)))
++
++ALIAS(int8_t, AudioSpecificConfig(uint8_t *pBuffer,
++				  uint32_t buffer_size,
++				  mp4AudioSpecificConfig *mp4ASC),
++	NeAACDecAudioSpecificConfig);
++
++#endif
