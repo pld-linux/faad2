@@ -110,3 +110,26 @@
     else
  	AC_MSG_NOTICE("MPEG4IP libmp4v2 is required for MPEG4IP plugin")
     fi
+--- faad2/plugins/mpeg4ip/faad2.cpp.orig	2007-11-13 21:24:36.000000000 +0100
++++ faad2/plugins/mpeg4ip/faad2.cpp	2007-11-13 21:38:55.000000000 +0100
+@@ -67,7 +67,7 @@
+     // This is not necessarilly right - it is, for the most part, but
+     // we should be reading the fmtp statement, and looking at the config.
+     // (like we do below in the userdata section...
+-    aac->m_freq = media_fmt->rtpmap->clock_rate;
++    aac->m_freq = media_fmt->rtpmap_clock_rate;
+     fmtp = parse_fmtp_for_mpeg4(media_fmt->fmt_param, vft->log_msg);
+     if (fmtp != NULL) {
+       userdata = fmtp->config_binary;
+@@ -308,9 +308,8 @@
+     }
+   }
+   if (fptr != NULL &&
+-      fptr->rtpmap != NULL &&
+-      fptr->rtpmap->encode_name != NULL) {
+-    if (strcasecmp(fptr->rtpmap->encode_name, "mpeg4-generic") != 0) {
++      fptr->rtpmap_name != NULL) {
++    if (strcasecmp(fptr->rtpmap_name, "mpeg4-generic") != 0) {
+       return -1;
+     }
+     if (userdata == NULL) {
