@@ -19,6 +19,7 @@ Patch0:		%{name}-make.patch
 Patch1:		%{name}-mpeg4ip.patch
 Patch2:		%{name}-soname.patch
 Patch3:		%{name}-backward_compat.patch
+Patch4:		%{name}-ac.patch
 URL:		http://www.audiocoding.com/
 %{?with_mpeg4ip:BuildRequires:	SDL-devel}
 BuildRequires:	autoconf
@@ -111,6 +112,7 @@ Wtyczka XMMS do plików AAC.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %build
 %{__libtoolize}
