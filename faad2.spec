@@ -10,7 +10,7 @@ Summary:	Freeware Advanced Audio Decoder 2
 Summary(pl.UTF-8):	Darmowy zaawansowany dekoder audio
 Name:		faad2
 Version:	2.6.1
-Release:	4
+Release:	5
 License:	GPL
 Group:		Applications/Sound
 Source0:	http://dl.sourceforge.net/faac/%{name}-%{version}.tar.gz
@@ -164,6 +164,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libmp4ff.la
 %{_includedir}/faad.h
 %{_includedir}/mp4ff.h
+%{_includedir}/mp4ff_int_types.h
 %{_includedir}/neaacdec.h
 
 %if %{with static_libs}
