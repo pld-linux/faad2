@@ -10,7 +10,7 @@ Summary:	Freeware Advanced Audio Decoder 2
 Summary(pl.UTF-8):	Darmowy zaawansowany dekoder audio
 Name:		faad2
 Version:	2.6.1
-Release:	2
+Release:	3
 License:	GPL
 Group:		Applications/Sound
 Source0:	http://dl.sourceforge.net/faac/%{name}-%{version}.tar.gz
@@ -20,6 +20,7 @@ Patch1:		%{name}-mpeg4ip.patch
 Patch2:		%{name}-soname.patch
 Patch3:		%{name}-backward_compat.patch
 Patch4:		%{name}-ac.patch
+Patch5:		%{name}-mp4ff.patch
 URL:		http://www.audiocoding.com/
 %{?with_mpeg4ip:BuildRequires:	SDL-devel}
 BuildRequires:	autoconf
@@ -113,6 +114,7 @@ Wtyczka XMMS do plików AAC.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 %build
 %{__libtoolize}
@@ -151,18 +153,24 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS ChangeLog NEWS README TODO
 %attr(755,root,root) %{_libdir}/libfaad.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libfaad.so.0
+%attr(755,root,root) %{_libdir}/libmp4ff.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libmp4ff.so.0
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libfaad.so
+%attr(755,root,root) %{_libdir}/libmp4ff.so
 %{_libdir}/libfaad.la
+%{_libdir}/libmp4ff.la
 %{_includedir}/faad.h
+%{_includedir}/mp4ff.h
 %{_includedir}/neaacdec.h
 
 %if %{with static_libs}
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libfaad.a
+%{_libdir}/libmp4ff.a
 %endif
 
 %if %{with xmms}
