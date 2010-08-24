@@ -4,16 +4,16 @@
 %bcond_without	mpeg4ip		# don't build MPEG4IP plugin
 %bcond_without	static_libs	# don't build static libraries
 %bcond_without	xmms		# don't build XMMS plugin
-#
+
 %{?with_bootstrap:%undefine with_mpeg4ip}
 Summary:	Freeware Advanced Audio Decoder 2
 Summary(pl.UTF-8):	Darmowy zaawansowany dekoder audio
 Name:		faad2
 Version:	2.6.1
-Release:	5
+Release:	6
 License:	GPL
 Group:		Applications/Sound
-Source0:	http://dl.sourceforge.net/faac/%{name}-%{version}.tar.gz
+Source0:	http://downloads.sourceforge.net/faac/%{name}-%{version}.tar.gz
 # Source0-md5:	74e92df40c270f216a8305fc87603c8a
 Patch0:		%{name}-make.patch
 Patch1:		%{name}-mpeg4ip.patch
