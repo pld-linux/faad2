@@ -11,7 +11,7 @@
  drm_dec.c error.c filtbank.c \
 --- faad2/libfaad/decoder.c.orig	2007-11-01 13:33:30.000000000 +0100
 +++ faad2/libfaad/decoder.c	2007-11-04 12:36:41.315350439 +0100
-@@ -1115,3 +1115,47 @@
+@@ -1115,3 +1115,57 @@
  
      return NULL;
  }
@@ -19,40 +19,50 @@
 +#ifndef NO_BACKWARD_COMPAT
 +#  define ALIAS(type, func, target) type NEAACDECAPI func __attribute__((alias(#target)))
 +
++#undef faacDecGetErrorMessage
 +ALIAS(char*, faacDecGetErrorMessage(uint8_t errcode),
 +	NeAACDecGetErrorMessage);
 +
++#undef faacDecSetConfiguration
 +ALIAS(uint8_t, faacDecSetConfiguration(NeAACDecHandle hDecoder,
 +				       NeAACDecConfigurationPtr config),
 +	NeAACDecSetConfiguration);
 +
++#undef faacDecGetCurrentConfiguration
 +ALIAS(NeAACDecConfigurationPtr, faacDecGetCurrentConfiguration(NeAACDecHandle hDecoder),
 +	NeAACDecGetCurrentConfiguration);
 +
++#undef faacDecInit
 +ALIAS(int32_t, faacDecInit(NeAACDecHandle hDecoder, uint8_t *buffer,
 +			   uint32_t buffer_size, uint32_t *samplerate, uint8_t *channels),
 +	NeAACDecInit);
 +
++#undef faacDecInit2
 +ALIAS(int8_t, faacDecInit2(NeAACDecHandle hDecoder, uint8_t *pBuffer,
 +			   uint32_t SizeOfDecoderSpecificInfo,
 +			   uint32_t *samplerate, uint8_t *channels),
 +	NeAACDecInit2);
 +
 +#ifdef DRM
++#undef faacDecInitDRM
 +ALIAS(int8_t, faacDecInitDRM(NeAACDecHandle *hDecoder, uint32_t samplerate,
 +			     uint8_t channels),
 +	NeAACDecInitDRM);
 +#endif
 +
++#undef faacDecPostSeekReset
 +ALIAS(void, faacDecPostSeekReset(NeAACDecHandle hDecoder, int32_t frame),
 +	NeAACDecPostSeekReset);
 +
++#undef faacDecOpen
 +ALIAS(NeAACDecHandle, faacDecOpen(void),
 +	NeAACDecOpen);
 +
++#undef faacDecClose
 +ALIAS(void, faacDecClose(NeAACDecHandle hDecoder),
 +	NeAACDecClose);
 +
++#undef faacDecDecode
 +ALIAS(void*, faacDecDecode(NeAACDecHandle hDecoder,
 +			   NeAACDecFrameInfo *hInfo,
 +			   uint8_t *buffer, uint32_t buffer_size),
@@ -61,7 +71,7 @@
 +#endif
 --- faad2/libfaad/mp4.c.orig	2007-11-01 13:33:32.000000000 +0100
 +++ faad2/libfaad/mp4.c	2007-11-04 12:35:57.860874110 +0100
-@@ -296,3 +296,13 @@
+@@ -296,3 +296,14 @@
  
      return result;
  }
@@ -69,6 +79,7 @@
 +#ifndef NO_BACKWARD_COMPAT
 +#  define ALIAS(type, func, target) type NEAACDECAPI func __attribute__((alias(#target)))
 +
++#undef AudioSpecificConfig
 +ALIAS(int8_t, AudioSpecificConfig(uint8_t *pBuffer,
 +				  uint32_t buffer_size,
 +				  mp4AudioSpecificConfig *mp4ASC),

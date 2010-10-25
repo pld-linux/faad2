@@ -9,18 +9,18 @@
 Summary:	Freeware Advanced Audio Decoder 2
 Summary(pl.UTF-8):	Darmowy zaawansowany dekoder audio
 Name:		faad2
-Version:	2.6.1
-Release:	6
-License:	GPL
+Version:	2.7
+Release:	1
+License:	GPL v2+
 Group:		Applications/Sound
-Source0:	http://downloads.sourceforge.net/faac/%{name}-%{version}.tar.gz
-# Source0-md5:	74e92df40c270f216a8305fc87603c8a
+Source0:	http://downloads.sourceforge.net/faac/%{name}-%{version}.tar.bz2
+# Source0-md5:	4c332fa23febc0e4648064685a3d4332
 Patch0:		%{name}-make.patch
 Patch1:		%{name}-mpeg4ip.patch
 Patch2:		%{name}-soname.patch
 Patch3:		%{name}-backward_compat.patch
-Patch4:		%{name}-ac.patch
-Patch5:		%{name}-mp4ff.patch
+Patch4:		%{name}-mp4ff.patch
+Patch5:		%{name}-man.patch
 URL:		http://www.audiocoding.com/
 %{?with_mpeg4ip:BuildRequires:	SDL-devel}
 BuildRequires:	autoconf
@@ -108,13 +108,14 @@ XMMS plugin for AAC files.
 Wtyczka XMMS do plików AAC.
 
 %prep
-%setup -q -n %{name}
+%setup -q
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+mv -f frontend/faad.{man,1}
 
 %build
 %{__libtoolize}
@@ -135,8 +136,8 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-rm -f $RPM_BUILD_ROOT%{xmms_input_plugindir}/*.{la,a}
-rm -f $RPM_BUILD_ROOT%{_libdir}/mp4player_plugin/*.{la,a}
+%{__rm} $RPM_BUILD_ROOT%{xmms_input_plugindir}/*.{la,a}
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/mp4player_plugin/*.{la,a}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -147,6 +148,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/faad
+%{_mandir}/man1/faad.1*
 
 %files libs
 %defattr(644,root,root,755)
@@ -165,6 +167,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/faad.h
 %{_includedir}/mp4ff.h
 %{_includedir}/mp4ff_int_types.h
+%{_includedir}/mp4ffint.h
 %{_includedir}/neaacdec.h
 
 %if %{with static_libs}
