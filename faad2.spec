@@ -21,13 +21,17 @@ Patch2:		%{name}-soname.patch
 Patch3:		%{name}-backward_compat.patch
 Patch4:		%{name}-mp4ff.patch
 Patch5:		%{name}-man.patch
+Patch6:		%{name}-mp4v2.patch
 URL:		http://www.audiocoding.com/
 %{?with_mpeg4ip:BuildRequires:	SDL-devel}
 BuildRequires:	autoconf
 BuildRequires:	automake
 %{?with_xmms:BuildRequires:	id3lib-devel >= 3.8.2}
 BuildRequires:	libtool >= 2:1.4d-3
-%{?with_mpeg4ip:BuildRequires:	mpeg4ip-devel >= 1:1.6}
+%if %{with mpeg4ip}
+BuildRequires:	mp4v2-devel
+BuildRequires:	mpeg4ip-devel >= 1:1.6
+%endif
 %{?with_xmms:BuildRequires:	rpmbuild(macros) >= 1.125}
 %{?with_xmms:BuildRequires:	xmms-devel}
 Requires:	%{name}-libs = %{version}-%{release}
@@ -115,6 +119,7 @@ Wtyczka XMMS do plików AAC.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 mv -f frontend/faad.{man,1}
 
 %build
