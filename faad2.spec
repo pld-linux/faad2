@@ -10,7 +10,7 @@ Summary:	Freeware Advanced Audio Decoder 2
 Summary(pl.UTF-8):	Darmowy zaawansowany dekoder audio
 Name:		faad2
 Version:	2.7
-Release:	2
+Release:	3
 License:	GPL v2+
 Group:		Applications/Sound
 Source0:	http://downloads.sourceforge.net/faac/%{name}-%{version}.tar.bz2
@@ -141,7 +141,9 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+%if %{with xmms}
 %{__rm} $RPM_BUILD_ROOT%{xmms_input_plugindir}/*.{la,a}
+%endif
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/mp4player_plugin/*.{la,a}
 
 %clean
