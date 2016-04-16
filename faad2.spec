@@ -1,7 +1,7 @@
 #
 # Conditional build:
 %bcond_with	bootstrap	# bootstrap (alias for _without_mpeg4ip)
-%bcond_without	mpeg4ip		# don't build MPEG4IP plugin
+%bcond_with	mpeg4ip		# don't build MPEG4IP plugin
 %bcond_without	static_libs	# don't build static libraries
 %bcond_without	xmms		# don't build XMMS plugin
 
@@ -10,7 +10,7 @@ Summary:	Freeware Advanced Audio Decoder 2
 Summary(pl.UTF-8):	Darmowy zaawansowany dekoder audio
 Name:		faad2
 Version:	2.7
-Release:	4
+Release:	5
 License:	GPL v2+
 Group:		Applications/Sound
 Source0:	http://downloads.sourceforge.net/faac/%{name}-%{version}.tar.bz2
