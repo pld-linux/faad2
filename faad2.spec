@@ -9,18 +9,16 @@
 Summary:	Freeware Advanced Audio Decoder 2
 Summary(pl.UTF-8):	Darmowy zaawansowany dekoder audio
 Name:		faad2
-Version:	2.7
-Release:	6
+Version:	2.8.6
+Release:	1
 License:	GPL v2+
 Group:		Applications/Sound
-Source0:	http://downloads.sourceforge.net/faac/%{name}-%{version}.tar.bz2
-# Source0-md5:	4c332fa23febc0e4648064685a3d4332
+Source0:	http://downloads.sourceforge.net/faac/%{name}-%{version}.tar.gz
+# Source0-md5:	21aa96dd6d57fd0436bf81c3988969ce
 Patch0:		%{name}-make.patch
 Patch1:		%{name}-mpeg4ip.patch
-Patch2:		%{name}-soname.patch
 Patch3:		%{name}-backward_compat.patch
 Patch4:		%{name}-mp4ff.patch
-Patch5:		%{name}-man.patch
 Patch6:		%{name}-mp4v2.patch
 URL:		http://www.audiocoding.com/
 %{?with_mpeg4ip:BuildRequires:	SDL-devel}
@@ -32,7 +30,7 @@ BuildRequires:	libtool >= 2:1.4d-3
 BuildRequires:	mp4v2-devel
 BuildRequires:	mpeg4ip-devel >= 1:1.6
 %endif
-%{?with_xmms:BuildRequires:	rpmbuild(macros) >= 1.125}
+BuildRequires:	rpmbuild(macros) >= 1.721
 %{?with_xmms:BuildRequires:	xmms-devel}
 Requires:	%{name}-libs = %{version}-%{release}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -49,6 +47,9 @@ obsługujący profile LC, MAIN i LTP.
 Summary:	FAAD 2 libraries
 Summary(pl.UTF-8):	Biblioteki FAAD 2
 Group:		Libraries
+%if 0%{?_soname_prov:1}
+Provides:	%{_soname_prov libfaad.so.0}
+%endif
 Conflicts:	faad2 < 2.0-3
 
 %description libs
@@ -115,12 +116,9 @@ Wtyczka XMMS do plików AAC.
 %setup -q
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1
 %patch6 -p1
-mv -f frontend/faad.{man,1}
 
 %build
 %{__libtoolize}
@@ -148,6 +146,9 @@ rm -rf $RPM_BUILD_ROOT
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/mp4player_plugin/*.{la,a}
 %endif
 
+# for compatibility with apps using dlopen("libfaad.so.0")
+ln -sf $(basename $RPM_BUILD_ROOT%{_libdir}/libfaad.so.2.*.*) $RPM_BUILD_ROOT%{_libdir}/libfaad.so.0
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -163,19 +164,24 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog NEWS README TODO
 %attr(755,root,root) %{_libdir}/libfaad.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libfaad.so.0
+%attr(755,root,root) %ghost %{_libdir}/libfaad.so.2
+# compat symlink
+%attr(755,root,root) %{_libdir}/libfaad.so.0
+%attr(755,root,root) %{_libdir}/libfaad_drm.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libfaad_drm.so.2
 %attr(755,root,root) %{_libdir}/libmp4ff.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libmp4ff.so.0
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libfaad.so
+%attr(755,root,root) %{_libdir}/libfaad_drm.so
 %attr(755,root,root) %{_libdir}/libmp4ff.so
 %{_libdir}/libfaad.la
+%{_libdir}/libfaad_drm.la
 %{_libdir}/libmp4ff.la
 %{_includedir}/faad.h
 %{_includedir}/mp4ff.h
-%{_includedir}/mp4ff_int_types.h
 %{_includedir}/mp4ffint.h
 %{_includedir}/neaacdec.h
 
@@ -183,6 +189,7 @@ rm -rf $RPM_BUILD_ROOT
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libfaad.a
+%{_libdir}/libfaad_drm.a
 %{_libdir}/libmp4ff.a
 %endif
 

@@ -1,14 +1,3 @@
---- faad2/libfaad/Makefile.am.orig	2007-01-16 17:52:58.000000000 +0000
-+++ faad2/libfaad/Makefile.am	2007-01-16 17:53:29.000000000 +0000
-@@ -4,7 +4,7 @@
-                   $(top_srcdir)/include/neaacdec.h
- 
- libfaad_la_LIBADD = -lm
--libfaad_la_LDFLAGS = -version-info 1:0:0
-+libfaad_la_LDFLAGS = -version-info 1:0:1
- 
- libfaad_la_SOURCES = bits.c cfft.c decoder.c drc.c \
- drm_dec.c error.c filtbank.c \
 --- faad2/libfaad/decoder.c.orig	2007-11-01 13:33:30.000000000 +0100
 +++ faad2/libfaad/decoder.c	2007-11-04 12:36:41.315350439 +0100
 @@ -1115,3 +1115,57 @@

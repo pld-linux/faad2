@@ -99,8 +99,8 @@
  int aac_file_eof(codec_data_t *ifptr);
  
  void aac_file_used_for_frame(codec_data_t *ifptr,
---- faad2/configure.in.orig	2006-09-25 21:52:53.000000000 +0200
-+++ faad2/configure.in	2007-11-04 11:51:50.486008814 +0100
+--- faad2/configure.ac.orig	2006-09-25 21:52:53.000000000 +0200
++++ faad2/configure.ac	2007-11-04 11:51:50.486008814 +0100
 @@ -123,6 +123,8 @@
     if test x$external_mp4v2 = xyes; then
        AM_CONDITIONAL(HAVE_MPEG4IP_PLUG, true)
