@@ -9,23 +9,27 @@
 Summary:	Freeware Advanced Audio Decoder 2
 Summary(pl.UTF-8):	Darmowy zaawansowany dekoder audio
 Name:		faad2
-Version:	2.8.8
+Version:	2.9.2
+%define	tag_ver	%(echo %{version} | tr . _)
 Release:	1
 License:	GPL v2+
 Group:		Applications/Sound
-Source0:	http://downloads.sourceforge.net/faac/%{name}-%{version}.tar.gz
-# Source0-md5:	28f6116efdbe9378269f8a6221767d1f
+#Source0:	http://downloads.sourceforge.net/faac/%{name}-%{version}.tar.gz
+#Source0Download: https://github.com/knik0/faad2/releases
+Source0:	https://github.com/knik0/faad2/archive/%{tag_ver}/%{name}-%{tag_ver}.tar.gz
+# Source0-md5:	ed0db61d6ffa3e67748c3f03468c6eec
 Patch0:		%{name}-make.patch
 Patch1:		%{name}-mpeg4ip.patch
 Patch3:		%{name}-backward_compat.patch
 Patch4:		%{name}-mp4ff.patch
-Patch6:		%{name}-mp4v2.patch
-URL:		http://www.audiocoding.com/
+Patch5:		%{name}-mp4v2.patch
+URL:		https://www.audiocoding.com/
 %{?with_mpeg4ip:BuildRequires:	SDL-devel}
-BuildRequires:	autoconf
+BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake
 %{?with_xmms:BuildRequires:	id3lib-devel >= 3.8.2}
 BuildRequires:	libtool >= 2:1.4d-3
+%{?with_xmms:BuildRequires:	mp4ff-devel}
 %if %{with mpeg4ip}
 BuildRequires:	mp4v2-devel
 BuildRequires:	mpeg4ip-devel >= 1:1.6
@@ -113,12 +117,12 @@ XMMS plugin for AAC files.
 Wtyczka XMMS do plików AAC.
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{tag_ver}
 %patch0 -p1
 %patch1 -p1
 %patch3 -p1
 %patch4 -p1
-%patch6 -p1
+%patch5 -p1
 
 %build
 %{__libtoolize}
@@ -127,8 +131,8 @@ Wtyczka XMMS do plików AAC.
 %{__autoheader}
 %{__automake}
 %configure \
-	--with%{!?with_xmms:out}-xmms \
-	--with%{!?with_mpeg4ip:out}-mpeg4ip \
+	--with-xmms%{!?with_xmms:=no} \
+	--with-mpeg4ip%{!?with_mpeg4ip:=no} \
 	%{!?with_static_libs:--disable-static}
 
 %{__make}
@@ -169,28 +173,22 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libfaad.so.0
 %attr(755,root,root) %{_libdir}/libfaad_drm.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libfaad_drm.so.2
-%attr(755,root,root) %{_libdir}/libmp4ff.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmp4ff.so.0
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libfaad.so
 %attr(755,root,root) %{_libdir}/libfaad_drm.so
-%attr(755,root,root) %{_libdir}/libmp4ff.so
 %{_libdir}/libfaad.la
 %{_libdir}/libfaad_drm.la
-%{_libdir}/libmp4ff.la
 %{_includedir}/faad.h
-%{_includedir}/mp4ff.h
-%{_includedir}/mp4ffint.h
 %{_includedir}/neaacdec.h
+%{_pkgconfigdir}/faad2.pc
 
 %if %{with static_libs}
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libfaad.a
 %{_libdir}/libfaad_drm.a
-%{_libdir}/libmp4ff.a
 %endif
 
 %if %{with xmms}
