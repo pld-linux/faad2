@@ -58,11 +58,11 @@
 +	NeAACDecDecode);
 +
 +#endif
---- faad2/libfaad/mp4.c.orig	2007-11-01 13:33:32.000000000 +0100
-+++ faad2/libfaad/mp4.c	2007-11-04 12:35:57.860874110 +0100
-@@ -296,3 +296,14 @@
- 
-     return result;
+--- faad2-2.10.1/libfaad/mp4.c.orig	2023-03-30 20:51:02.976701799 +0200
++++ faad2-2.10.1/libfaad/mp4.c	2023-03-30 20:52:50.676118341 +0200
+@@ -310,3 +310,14 @@ int8_t AudioSpecificConfig2(uint8_t *pBu
+     faad_endbits(&ld);
+     return ret;
  }
 +
 +#ifndef NO_BACKWARD_COMPAT

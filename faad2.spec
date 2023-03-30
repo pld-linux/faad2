@@ -1,23 +1,22 @@
 #
 # Conditional build:
 %bcond_with	bootstrap	# bootstrap (alias for _without_mpeg4ip)
-%bcond_with	mpeg4ip		# don't build MPEG4IP plugin
-%bcond_without	static_libs	# don't build static libraries
-%bcond_without	xmms		# don't build XMMS plugin
+%bcond_with	mpeg4ip		# MPEG4IP plugin
+%bcond_without	static_libs	# static libraries
+%bcond_without	xmms		# XMMS plugin
 
 %{?with_bootstrap:%undefine with_mpeg4ip}
 Summary:	Freeware Advanced Audio Decoder 2
 Summary(pl.UTF-8):	Darmowy zaawansowany dekoder audio
 Name:		faad2
-Version:	2.10.0
-%define	tag_ver	%(echo %{version} | tr . _)
+Version:	2.10.1
 Release:	1
 License:	GPL v2+
 Group:		Applications/Sound
 #Source0:	http://downloads.sourceforge.net/faac/%{name}-%{version}.tar.gz
 #Source0Download: https://github.com/knik0/faad2/releases
-Source0:	https://github.com/knik0/faad2/archive/%{tag_ver}/%{name}-%{tag_ver}.tar.gz
-# Source0-md5:	f948925a6763e30c53078f5af339d6cc
+Source0:	https://github.com/knik0/faad2/archive/%{version}/%{name}-%{version}.tar.gz
+# Source0-md5:	62a0427c6ff3a273aa720e27da166758
 Patch0:		%{name}-make.patch
 Patch1:		%{name}-mpeg4ip.patch
 Patch3:		%{name}-backward_compat.patch
@@ -117,7 +116,7 @@ XMMS plugin for AAC files.
 Wtyczka XMMS do plików AAC.
 
 %prep
-%setup -q -n %{name}-%{tag_ver}
+%setup -q
 %patch0 -p1
 %patch1 -p1
 %patch3 -p1
