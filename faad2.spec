@@ -1,40 +1,22 @@
 #
 # Conditional build:
-%bcond_with	bootstrap	# bootstrap (alias for _without_mpeg4ip)
-%bcond_with	mpeg4ip		# MPEG4IP plugin
 %bcond_without	static_libs	# static libraries
-%bcond_without	xmms		# XMMS plugin
 
-%{?with_bootstrap:%undefine with_mpeg4ip}
 Summary:	Freeware Advanced Audio Decoder 2
 Summary(pl.UTF-8):	Darmowy zaawansowany dekoder audio
 Name:		faad2
-Version:	2.10.1
+Version:	2.11.1
 Release:	1
 License:	GPL v2+
 Group:		Applications/Sound
 #Source0:	http://downloads.sourceforge.net/faac/%{name}-%{version}.tar.gz
 #Source0Download: https://github.com/knik0/faad2/releases
 Source0:	https://github.com/knik0/faad2/archive/%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	62a0427c6ff3a273aa720e27da166758
-Patch0:		%{name}-make.patch
-Patch1:		%{name}-mpeg4ip.patch
-Patch3:		%{name}-backward_compat.patch
-Patch4:		%{name}-mp4ff.patch
-Patch5:		%{name}-mp4v2.patch
-URL:		https://www.audiocoding.com/
-%{?with_mpeg4ip:BuildRequires:	SDL-devel}
-BuildRequires:	autoconf >= 2.50
-BuildRequires:	automake
-%{?with_xmms:BuildRequires:	id3lib-devel >= 3.8.2}
-BuildRequires:	libtool >= 2:1.4d-3
-%{?with_xmms:BuildRequires:	mp4ff-devel}
-%if %{with mpeg4ip}
-BuildRequires:	mp4v2-devel
-BuildRequires:	mpeg4ip-devel >= 1:1.6
-%endif
+# Source0-md5:	f85b2514c4fb2f87d22a3bc879d83277
+Patch0:		%{name}-backward_compat.patch
+URL:		https://github.com/knik0/faad2
+BuildRequires:	cmake >= 3.15
 BuildRequires:	rpmbuild(macros) >= 1.721
-%{?with_xmms:BuildRequires:	xmms-devel}
 Requires:	%{name}-libs = %{version}-%{release}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -58,12 +40,12 @@ Conflicts:	faad2 < 2.0-3
 %description libs
 FAAD 2 is a LC, MAIN and LTP profile, MPEG2 and MPEG-4 AAC decoder,
 completely written from scratch. This package contains base FAAD 2
-libraries: libfaad and libmp4ff.
+libraries: libfaad and libfaad_drm.
 
 %description libs -l pl.UTF-8
 FAAD 2 to napisany całkowicie od początku dekoder MPEG2 i MPEG-4
 obsługujący profile LC, MAIN i LTP. Ten pakiet zawiera podstawowe
-biblioteki FAAD 2: libfaad i libmp4ff.
+biblioteki FAAD 2: libfaad i libfaad_drm.
 
 %package devel
 Summary:	Header files for faad2
@@ -89,65 +71,36 @@ Static faad2 library.
 %description static -l pl.UTF-8
 Statyczna biblioteka faad2.
 
-%package -n mpeg4ip-plugin-faad2
-Summary:	MPEG4IP plugin for AAC files
-Summary(pl.UTF-8):	Wtyczka MPEG4IP do plików AAC
-Group:		Applications/Sound
-Requires:	%{name}-libs = %{version}-%{release}
-Requires:	mpeg4ip
-
-%description -n mpeg4ip-plugin-faad2
-MPEG4IP plugin for AAC files.
-
-%description -n mpeg4ip-plugin-faad2 -l pl.UTF-8
-Wtyczka MPEG4IP do plików AAC.
-
-%package -n xmms-input-faad2
-Summary:	XMMS plugin for AAC files
-Summary(pl.UTF-8):	Wtyczka XMMS do plików AAC
-Group:		X11/Applications/Sound
-Requires:	%{name}-libs = %{version}-%{release}
-Requires:	xmms
-
-%description -n xmms-input-faad2
-XMMS plugin for AAC files.
-
-%description -n xmms-input-faad2 -l pl.UTF-8
-Wtyczka XMMS do plików AAC.
-
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
 
 %build
-%{__libtoolize}
-%{__aclocal}
-%{__autoconf}
-%{__autoheader}
-%{__automake}
-%configure \
-	--with-xmms%{!?with_xmms:=no} \
-	--with-mpeg4ip%{!?with_mpeg4ip:=no} \
-	%{!?with_static_libs:--disable-static}
+%if %{with static_libs}
+%cmake -B build-static \
+	-DBUILD_SHARED_LIBS=OFF
 
-%{__make}
+%{__make} -C build-static
+%endif
+
+%cmake -B build
+
+%{__make} -C build
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%{__make} install \
+%if %{with static_libs}
+%{__make} -C build-static install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-%if %{with xmms}
-%{__rm} $RPM_BUILD_ROOT%{xmms_input_plugindir}/*.{la,a}
+# ensure files from shared build are packaged
+%{__rm} $RPM_BUILD_ROOT%{_bindir}/faad
+%{__rm} $RPM_BUILD_ROOT%{_pkgconfigdir}/faad2.pc
 %endif
-%if %{with mpeg4ip}
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/mp4player_plugin/*.{la,a}
-%endif
+
+%{__make} -C build install \
+	DESTDIR=$RPM_BUILD_ROOT
 
 # for compatibility with apps using dlopen("libfaad.so.0")
 ln -sf $(basename $RPM_BUILD_ROOT%{_libdir}/libfaad.so.2.*.*) $RPM_BUILD_ROOT%{_libdir}/libfaad.so.0
@@ -165,7 +118,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files libs
 %defattr(644,root,root,755)
-%doc AUTHORS ChangeLog NEWS README TODO
+%doc AUTHORS ChangeLog README
 %attr(755,root,root) %{_libdir}/libfaad.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libfaad.so.2
 # compat symlink
@@ -177,8 +130,6 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libfaad.so
 %attr(755,root,root) %{_libdir}/libfaad_drm.so
-%{_libdir}/libfaad.la
-%{_libdir}/libfaad_drm.la
 %{_includedir}/faad.h
 %{_includedir}/neaacdec.h
 %{_pkgconfigdir}/faad2.pc
@@ -188,16 +139,4 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %{_libdir}/libfaad.a
 %{_libdir}/libfaad_drm.a
-%endif
-
-%if %{with xmms}
-%files -n xmms-input-faad2
-%defattr(644,root,root,755)
-%attr(755,root,root) %{xmms_input_plugindir}/libmp4.so
-%endif
-
-%if %{with mpeg4ip}
-%files -n mpeg4ip-plugin-faad2
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/mp4player_plugin/faad2_plugin.so*
 %endif
